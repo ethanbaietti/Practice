@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Aug 20 12:35:41 2020
+Created on Thu Aug 20 13:43:08 2020
 
-@author: ethanbaietti
+@author: ethan.baietti
 """
 
 import pandas as pd
@@ -32,4 +31,86 @@ sns.boxplot(data = df)
 stats_df = df.drop(['Total', 'Stage', 'Legendary'], axis = 1)
 
 sns.boxplot(data = stats_df)
+
+#Seaborn Themes -Violin PLots
+
+sns.set_style('whitegrid')
+sns.violinplot(x = 'Type 1', y = 'Attack', data = df)
+
+pkmn_type_colors = ['#78C850',
+                    '#F08030',  
+                    '#6890F0',  
+                    '#A8B820',  
+                    '#A8A878',  
+                    '#A040A0',  
+                    '#F8D030',  
+                    '#E0C068',  
+                    '#EE99AC',  
+                    '#C03028',  
+                    '#F85888',  
+                    '#B8A038',  
+                    '#705898',  
+                    '#98D8D8',  
+                    '#7038F8',  
+                   ]
+
+
+
+sns.violinplot(x = 'Type 1' , y = 'Attack', data = df, palette=pkmn_type_colors)
+
+##Swarm Plot
+sns.swarmplot(x= 'Type 1', y = 'Attack', data = df, palette = pkmn_type_colors)
+
+
+
+#Overlaaying Plots
+plt.figure(figsize=(10,6))
+
+#Create Plot
+sns.violinplot(x= 'Type 1',
+               y = 'Attack',
+               data = df,
+               inner = None, #remove bars inside violin
+               palette = pkmn_type_colors)
+
+
+
+sns.swarmplot(x = 'Type 1',
+              y = 'Attack',
+              data = df,
+              color = 'k',
+              alpha = 0.7)
+
+plt.title('Attack by Type')
+
+#Melt DataFrame
+
+melted_df = pd.melt(stats_df, 
+                    id_vars = ['Name','Type 1', 'Type 2'],
+                    var_name = 'Stat')
+
+melted_df.head()
+
+print(stats_df.shape)
+print(melted_df.shape)
+
+sns.swarmplot(x = 'Stat', y = 'value', data = melted_df, hue = 'Type 1')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
