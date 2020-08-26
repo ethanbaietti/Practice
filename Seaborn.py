@@ -96,21 +96,51 @@ print(melted_df.shape)
 
 sns.swarmplot(x = 'Stat', y = 'value', data = melted_df, hue = 'Type 1')
 
+#Customizations
+
+plt.figure(figsize=(10,6))
+
+sns.swarmplot(x = 'Stat',
+              y = 'value',
+              data = melted_df,
+              hue = 'Type 1',
+                     split = True,
+       palette = pkmn_type_colors)
+
+plt.ylim(0, 260)
+plt.legend(bbox_to_anchor=(1,1), loc= 2)
+
+#Heatmap
+corr = stats_df.corr()
+sns.heatmap(corr)
+
+#Distribution Plot
+
+sns.distplot(df.Attack)
+
+#Bar Plot
+sns.countplot(x = 'Type 1', data=df, palette = pkmn_type_colors)
+plt.xticks(rotation = -45)
 
 
+#Factor PLot
 
+g = sns.factorplot(x = 'Type 1', 
+                   y = 'Attack', 
+                   data = df,
+                   hue='Stage',
+                   col = 'Stage',
+                   kind = 'swarm')
 
+# plt.xticks(rotation = -45) - doesn't work
 
+g.set_xticklabels(rotation = -45)
 
+#Density Plot
 
+sns.kdeplot(df.Attack, df.Defense)
 
-
-
-
-
-
-
-
-
+#Joint Plot
+sns.jointplot(x = 'Attack', y = 'Defense', data=df)
 
 
