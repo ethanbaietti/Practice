@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
+from nba_api.stats.static import teams
+from nba_api.stats.endpoints import leaguegamefinder
+import pandas as pd
+import matplotlib.pyploy as plt
+import seaborn as sns
+
+nba_teams = teams.get_teams()
+
+#Lakers
+
+lakers = [team for team in nba_teams if team ['abbreviation']== 'LAL'][0]
+lakers_id = lakers['id']
+
+
+gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=lakers_id)
+games = gamefinder.get_data_frames()[0]
+
+lakers_19 = games[games['SEASON_ID'].str[-4:] == '2019'] #Filtering to 2019 Season
+lakers_19 = lakers_19[lakers_19['GAME_DATE'] > "2019-10-20"] #Removing Summer League Games
+lakers_19 = lakers_19[['WL', 'FG3_PCT','PLUS_MINUS']]
+lakers_19.head()
+
+
+#Houston
+
+rockets = [team for team in nba_teams if team ['abbreviation']== 'HOU'][0]
+rockets_id = rockets['id']
+
+from nba_api.stats.endpoints import leaguegamefinder
+gamefinder = leaguegamefinder.LeagueGameFinder(team_id_nullable=rockets_id)
+games = gamefinder.get_data_frames()[0]
+
+rockets_19 = games[games['SEASON_ID'].str[-4:] == '2019'] #Filtering to 2019 Season
+rockets_19 = rockets_19[rockets_19['GAME_DATE'] > "2019-10-20"] #Removing Summer League Games
+rockets_19 = rockets_19[['WL', 'FG3_PCT','PLUS_MINUS']]
+rockets_19.head()
+
+plt.figure(figsize=(10,6))
+sns.lmplot(x = 'FG3_PCT' , y = 'PLUS_MINUS', data = lakers_19,  hue = 'WL')
+sns.lmplot(x = 'FG3_PCT' , y = 'PLUS_MINUS', data = rockets_19,  hue = 'WL')
